@@ -1,0 +1,37 @@
+# Byte-compiled / cache files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+env/
+
+# IDE/editor files
+.vscode/
+.idea/
+*.sublime-workspace
+
+# Logs and database files
+*.log
+*.sqlite3
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Ignore environment variables and credentials
+.env
+*.secrets
+
+# PySide6 UI cache
+*.pyc
+*.pyo
+*.qmlc
+*.qrc
+
+# Build files
+build/
+dist/
+*.spec
