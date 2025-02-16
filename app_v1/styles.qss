@@ -1,0 +1,38 @@
+QWidget {
+    background-color:rgb(189, 189, 189);
+    color: black;
+}
+
+QPushButton {
+    background-color: rgb(189, 189, 189);
+    border-radius: 10px;
+    padding: 8px;
+}
+
+QPushButton#input_button {
+    color: #3498db;
+    border: 2px solid #3498db;
+}
+
+QPushButton#output_button {
+    color: #1e8449;
+    border: 2px solid #1e8449;
+}
+
+QPushButton#run_button {
+    color: black;
+    border: 2px solid black;
+    padding: 10px;
+}
+
+QProgressBar {
+    border: 2px solid black;
+    border-radius: 5px;
+    text-align: center;
+    background: white;
+}
+
+QProgressBar::chunk {
+    background-color: #3498db;
+    width: 10px;
+}
