@@ -40,4 +40,6 @@ dist/
 # Project-specific
 *.wav
 *.txt
+# Do NOT ignore requirements.txt
+!requirements.txt
 drafts/
