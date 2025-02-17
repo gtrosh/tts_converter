@@ -1,6 +1,7 @@
 from pathlib import Path
 from PySide6.QtCore import QThread, Signal
 from TTS.api import TTS
+import time
 
 
 class TTSThread(QThread):
@@ -15,21 +16,21 @@ class TTSThread(QThread):
 
     def run(self):
         try:
-            self.progress.emit(10)  # Start progress
+            self.progress.emit(5)
 
-            # Load the Coqui TTS model
-            self.progress.emit(30)
             tts = TTS(model_name="tts_models/pt/cv/vits", progress_bar=False, gpu=False)
+            self.progress.emit(20)
 
-            # Read text from file
-            self.progress.emit(50)
             text = self.input_file.read_text(encoding="utf-8").strip()
+            self.progress.emit(30)
 
-            # Convert text to speech
-            self.progress.emit(70)
+            for i in range(30, 90, 5):
+                time.sleep(1)
+                self.progress.emit(i)
+
             tts.tts_to_file(text=text, file_path=str(self.output_file))
 
-            self.progress.emit(100)  # Complete
+            self.progress.emit(100)
             self.finished_signal.emit(f"Audio saved as: {self.output_file.name}")
 
         except Exception as e:
