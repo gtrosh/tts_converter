@@ -1,8 +1,10 @@
 # Byte-compiled / cache files
+app_v1/__pycache__/
 __pycache__/
 *.py[cod]
 *.pyo
 *.pyd
+*.pyc
 
 # Virtual environment
 venv/

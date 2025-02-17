@@ -87,6 +87,9 @@ class TTSApp(QWidget):
             self.input_file = Path(file_path)
             self.file_label.setText(f"Selected: {self.input_file.name}")
 
+            self.progress_bar.setValue(0)
+            self.progress_bar.setVisible(False)
+
     def select_output_file(self):
         default_name = "output.wav"
         file_path, _ = QFileDialog.getSaveFileName(
