@@ -5,8 +5,8 @@ from PySide6.QtWidgets import (
     QApplication, QWidget, QVBoxLayout, QPushButton, QFileDialog,
     QLabel, QHBoxLayout, QSizePolicy, QProgressBar
 )
-from PySide6.QtCore import Qt
-from app_v1.tts_engine import TTSThread  # Importing the TTS thread
+from PySide6.QtCore import Qt, QTimer
+from app_v1.tts_engine import TTSThread
 
 
 class TTSApp(QWidget):
@@ -20,7 +20,6 @@ class TTSApp(QWidget):
         app_font = QFont("Verdana", 12)
         self.setFont(app_font)
 
-        # Load styles from an external file
         with open("app_v1/styles.qss", "r") as f:
             self.setStyleSheet(f.read())
 
@@ -30,28 +29,24 @@ class TTSApp(QWidget):
 
         button_font = QFont("Verdana", 12)
 
-        # Label for input and output files
         self.file_label = QLabel("Select files:")
         main_layout.addWidget(self.file_label)
 
-        # Create a horizontal layout for the two buttons
         file_buttons_layout = QHBoxLayout()
         file_buttons_layout.setSpacing(10)
 
         button_min_width = 190
 
-        # Button to browse for text file
         self.input_button = QPushButton("Add Text File", self)
-        self.input_button.setObjectName("input_button")  # Set object name for styling
+        self.input_button.setObjectName("input_button")
         self.input_button.setFont(button_font)
         self.input_button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         self.input_button.setMinimumWidth(button_min_width)
         self.input_button.clicked.connect(self.select_input_file)
         file_buttons_layout.addWidget(self.input_button)
 
-        # Button to choose output file
         self.output_button = QPushButton("Select Output Location", self)
-        self.output_button.setObjectName("output_button")  # Set object name for styling
+        self.output_button.setObjectName("output_button")
         self.output_button.setFont(button_font)
         self.output_button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         self.output_button.setMinimumWidth(button_min_width)
@@ -60,14 +55,12 @@ class TTSApp(QWidget):
 
         main_layout.addLayout(file_buttons_layout)
 
-        # Convert Button
         self.run_button = QPushButton("Convert", self)
-        self.run_button.setObjectName("run_button")  # Set object name for styling
+        self.run_button.setObjectName("run_button")
         self.run_button.setFont(button_font)
         self.run_button.clicked.connect(self.convert_text_to_speech)
         main_layout.addWidget(self.run_button)
 
-        # Progress Bar
         self.progress_bar = QProgressBar(self)
         self.progress_bar.setAlignment(Qt.AlignCenter)
         self.progress_bar.setValue(0)
@@ -77,7 +70,6 @@ class TTSApp(QWidget):
         self.setLayout(main_layout)
         self.adjustSize()
 
-        # Default file paths
         self.input_file = ""
         self.output_file = ""
 
@@ -112,14 +104,20 @@ class TTSApp(QWidget):
         self.progress_bar.setValue(0)
         self.progress_bar.setVisible(True)
 
-        # Create and start TTS conversion thread
         self.thread = TTSThread(self.input_file, self.output_file)
         self.thread.progress.connect(self.update_progress)
         self.thread.finished_signal.connect(self.conversion_finished)
         self.thread.start()
 
-    def update_progress(self, value):
+    def update_progress(self, value, message=""):
         self.progress_bar.setValue(value)
+        if message:
+            self.progress_bar.setFormat(message)
 
     def conversion_finished(self, message):
         self.file_label.setText(message)
+        self.progress_bar.setFormat("Done!")
+        QTimer.singleShot(1500, self.hide_progress_bar)
+    
+    def hide_progress_bar(self):
+        self.progress_bar.setVisible(False)

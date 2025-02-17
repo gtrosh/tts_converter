@@ -6,7 +6,7 @@ import time
 
 class TTSThread(QThread):
     """ Background thread to run TTS conversion without freezing UI """
-    progress = Signal(int)
+    progress = Signal(int, str)
     finished_signal = Signal(str)
 
     def __init__(self, input_file, output_file):
@@ -16,21 +16,22 @@ class TTSThread(QThread):
 
     def run(self):
         try:
-            self.progress.emit(5)
+            self.progress.emit(10, "Starting conversion...")
+            time.sleep(1)
 
+            self.progress.emit(30, "Loading TTS model...")
             tts = TTS(model_name="tts_models/pt/cv/vits", progress_bar=False, gpu=False)
-            self.progress.emit(20)
+            time.sleep(1)
 
+            self.progress.emit(50, "Reading input text...")
             text = self.input_file.read_text(encoding="utf-8").strip()
-            self.progress.emit(30)
+            time.sleep(1)
 
-            for i in range(30, 90, 5):
-                time.sleep(1)
-                self.progress.emit(i)
-
+            self.progress.emit(70, "Generating speech...")
             tts.tts_to_file(text=text, file_path=str(self.output_file))
 
-            self.progress.emit(100)
+            self.progress.emit(100, "Saving output file...")
+            time.sleep(1)
             self.finished_signal.emit(f"Audio saved as: {self.output_file.name}")
 
         except Exception as e:
