@@ -83,7 +83,7 @@ class TTSApp(QWidget):
             self.progress_bar.setVisible(False)
 
     def select_output_file(self):
-        default_name = "output.wav"
+        default_name = f"{self.input_file.stem}.wav" if self.input_file else "output.wav"
         file_path, _ = QFileDialog.getSaveFileName(
             self, "Select Output File", default_name,
             "Audio Files (*.wav);;All Files (*)"
